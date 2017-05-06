@@ -1,0 +1,25 @@
+galaxy_info:
+  author: jontheniceguy
+  description: This role provisions and configures Google Cloud Print
+  # company:
+
+  license: BSD
+
+  min_ansible_version: 1.2
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - xenial
+  - name: Debian
+    versions:
+    - sid
+
+  galaxy_tags: 
+    gcp
+    google-cloud-print
+    cloud print
+    google cloud print
+    cloud-print
+
+dependencies: []

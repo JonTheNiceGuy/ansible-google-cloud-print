@@ -1,0 +1,19 @@
+# Copyright 2016 Google Inc. All rights reserved.
+#
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file or at
+# https://developers.google.com/open-source/licenses/bsd
+
+[Unit]
+Description=Google Cloud Print Connector
+Documentation="https://github.com/google/cloud-print-connector"
+After=cups.service avahi-daemon.service network-online.target
+Wants=cups.service avahi-daemon.service network-online.target
+
+[Service]
+ExecStart=/usr/bin/gcp-cups-connector {% if gcp_config_file_src != "" or force_gcp_config_file|default(False) == True %}--config-filename "{{ gcp_config_file_path|default("/etc/cloud-print-connector") }}/{{ gcp_config_file_name|default("secret.json") }}" {% endif %}--log-to-console
+Restart=on-failure
+User={{ gcp_username|default("cloud-print-connector") }}
+
+[Install]
+WantedBy=multi-user.target

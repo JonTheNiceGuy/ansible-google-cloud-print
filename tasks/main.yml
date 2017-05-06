@@ -1,0 +1,35 @@
+---
+- name: Include OS-Specific Variables
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Install the latest version of Google-Cloud-Print-Connector
+  package:
+    name: "{{ google_cloud_print_package }}"
+    state: latest
+
+- name: Create GCP daemon user
+  user:
+    name: "{{ gcp_username|default('cloud-print-connector') }}"
+    system: yes
+    state: present
+    group: "{{ gcp_group|default('nogroup') }}"
+    home: "{{ gcp_config_file|default('/etc/cloud-print-connector') }}"
+    shell: /bin/false
+
+- name: Copy gcp config file if defined
+  copy:
+    src: "{{ gcp_config_file_src }}"
+    dest: "{{ gcp_config_file_path|default('/etc/cloud-print-connector') }}/{{ gcp_config_file_name|default('secret.json') }}"
+    owner: "{{ gcp_username|default('cloud-print-connector') }}"
+    group: "{{ gcp_group|default('nogroup') }}"
+    mode: 0600
+  when: gcp_config_file_src is defined and gcp_config_file_src != ""
+
+- name: Copy gcp systemd file
+  template:
+    src: "templates/systemd_service.j2"
+    dest: "/etc/systemd/system/cloud-print-connector.service"
+    owner: root
+    group: root
+    mode: 0644
+  notify: Start Service
