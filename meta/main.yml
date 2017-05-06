@@ -16,10 +16,11 @@ galaxy_info:
     - sid
 
   galaxy_tags: 
-    gcp
-    google-cloud-print
-    cloud print
-    google cloud print
-    cloud-print
+    - gcp
+    - google-cloud-print
+    - cloud print
+    - google cloud print
+    - cloud-print
+    - system
 
 dependencies: []
